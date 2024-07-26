@@ -3,7 +3,7 @@
 ## Members
 
 - Kaydnnnnnnnnnn toh shinnnnnn something
-- Member 2
+- smth
 - Member 3
 - Member 4
 
