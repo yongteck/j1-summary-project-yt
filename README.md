@@ -6,5 +6,6 @@
 - smth
 - kaydn is bad at basketball
 - Trashy yong teck
+- yong teck sucks
 
 <Description of your project>
