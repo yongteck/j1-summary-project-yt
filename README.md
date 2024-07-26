@@ -4,7 +4,7 @@
 
 - Kaydnnnnnnnnnn toh shinnnnnn something
 - smth
-- Member 3
+- kaydn is bad at basketball
 - Trashy yong teck
 
 <Description of your project>
