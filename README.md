@@ -3,7 +3,7 @@
 ## Members
 
 - Mr Ng
-- Member 2
+- Ghostttt
 - Member 3
 - Member 4
 
