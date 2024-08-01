@@ -3,8 +3,9 @@
 ## Members
 
 - Kaydnnnnnnnnnn toh shinnnnnn something
-- Member 2
-- Member 3
-- Member 4
+- smth
+- kaydn is bad at basketball
+- Trashy yong teck
+- yong teck sucks
 
 <Description of your project>
