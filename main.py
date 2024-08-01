@@ -15,12 +15,22 @@ class Game:
         self.ended = False
         self.phase = "explore"
         self.player = Player()
+        self.roomdata = {
+            "hallway":
+            {
+                "description":"its a hallway"
+            }
+            ,"dining room":
+            {
+                "description":"people eat in this dining room"
+            }
+        }
 
     def isover(self):
         return self.ended
 
     def CheckNode(self,room):
-        return 
+        return self.roomdata[room]
 
     def gameloop(self):
         print("game is running")
