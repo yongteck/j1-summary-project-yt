@@ -1,14 +1,11 @@
 # Import statements
-class Player:
-    def __init__(self):
-        self.playerpos = 0
-        self.playerhp = 10
-
-class Monsters:
+#yt
+class Entity:
     def __init__(self):
         self.hp = 10
         self.atk = 10
 
+#jayden
 class Game:
     def __init__(self):
         print("game has started")
@@ -43,11 +40,15 @@ class Game:
             print("kaydn bum event")
 
     
-
+#jayden
 if __name__ == "__main__":
     print("skibidi toilet")
     game = Game()
     while not game.isover():
         game.gameloop()
-        
+
+
+#kaydn
+
+#xinyu
 
