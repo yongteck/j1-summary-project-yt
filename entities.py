@@ -1,9 +1,14 @@
-class Player:
-    def __init__(self):
-        self.playerpos = 0
-        self.playerhp = 10
+class Entities:
+    def __init__(self,hp,damage,sanity):
+        self.hp = hp
+        self.damage = damage
+        self.sanity = sanity
+        
+    def change_sanity(self,value):
+        self.sanity += value
 
-class Monster:
-    def __init__(self):
-        self.hp = 10
-        self.atk = 10
+    def change_damage(self,value):
+        self.damage += value
+
+    def change_hp(self,value):
+        self.hp += value
