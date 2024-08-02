@@ -11,5 +11,21 @@ if __name__ == "__main__":
 #kaydn
 
 #xinyu
+class item:
+    def __init__(self, descriptions, effects, states):
+        self.description = descriptions
+        self.effects = effects
+        self.states = states
+
+    def check_description(self):
+        return self.description
+
+    def check_effects(self):
+        return self.effects 
+
+    def check_states(self):
+        return self.states
+
+    
 
 
