@@ -1,7 +1,7 @@
 # Import statements
 from entities import Player,Monster
 from game import Game
-from rooms import Room
+from rooms import Room, Map
 #yt
     
 #jayden
