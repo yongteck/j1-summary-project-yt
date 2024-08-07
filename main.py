@@ -1,5 +1,5 @@
 # Import statements
-from entities import Player,Monster
+from entities import Entities
 from game import Game
 from rooms import Room
 #yt
@@ -11,6 +11,7 @@ if __name__ == "__main__":
 #kaydn
 
 #xinyu
+
 class Item:
     def __init__(self, descriptions, effects, states):
         self.description = descriptions
