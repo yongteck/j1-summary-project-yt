@@ -26,6 +26,14 @@ class item:
     def check_states(self):
         return self.states
 
+    def set_descriptions(self,description):
+        self.description = description
+
+    def set_effects(self, effect):
+        self.effects = effect
+
+    def set_states(self, state):
+        self.states = state
     
 
 
