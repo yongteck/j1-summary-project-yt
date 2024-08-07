@@ -1,5 +1,5 @@
 # Import statements
-from entities import Entities
+from entities import Entitiy
 from game import Game
 from rooms import Room
 #yt
