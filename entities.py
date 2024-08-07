@@ -4,7 +4,7 @@ class Entities:
         self.damage = damage
         self.sanity = sanity
         self.effects = []
-
+        
     def change_sanity(self,value):
         self.sanity += value
 
@@ -19,3 +19,4 @@ class Entities:
 
     def remove_effects(self,lst):
         self.effects = [i for i in self.effects if i not in lst]
+
