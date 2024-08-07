@@ -11,7 +11,8 @@ if __name__ == "__main__":
 #kaydn
 
 #xinyu
-class item:
+
+class Item:
     def __init__(self, descriptions, effects, states):
         self.description = descriptions
         self.effects = effects
@@ -34,5 +35,3 @@ class item:
 
     def set_states(self, state):
         self.states = state
-    
-
