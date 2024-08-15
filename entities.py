@@ -1,10 +1,15 @@
-class Entitiy:
+import random
+class Entity:
     def __init__(self,hp,attack,sanity):
         self.hp = hp
         self.maxhp = hp
         self.attack = attack
         self.sanity = sanity
-        self.effects = []
+        self.effects = [{"name":"poison"}]
+        self.moves = {
+            "hit" : {"description":"hit the person"},
+            "defend": {"description":"block the attack"}
+        }
         
     def change_sanity(self,value):
         self.sanity += value
@@ -28,6 +33,19 @@ class Entitiy:
         for effname in self.effects:
             if effname["name"] == "poison":
                 self.change_hp(effname["damage"])
+
+    def getmoves(self,person):
+        if person == "P":
+            return [i for i in self.moves ]
+        if person == "M":
+            return random.choice(list(self.moves.keys()))
+
+    def usemove(self, move):
+        return self.moves[move]["description"]
+
+# player = Entity(10,10,10)
+# choice = input(player.getmoves("P"))
+# print(player.usemove(choice))
 
     
 
