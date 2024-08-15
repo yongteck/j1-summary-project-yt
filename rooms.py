@@ -35,7 +35,5 @@ class Map:
     def GoNextRoom(self, roomId):
         self.current = roomId
     def GetRoomData(self):
-        return [self.current.type, self.current.monsters, self.current.items]
+        return [self.current.CheckRoomType(), self.current.CheckRoomMonsters(), self.current.CheckRoomItems()]
 
-
-        
