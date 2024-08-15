@@ -24,7 +24,7 @@ class Room:
     def CheckRoomItems(self):
         return self.items
 
-    def GetNextRoom(self):
+    def GetNextRoom(self): 
         return self.next
 
 class Map:
