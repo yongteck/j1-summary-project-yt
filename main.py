@@ -1,12 +1,14 @@
 # Import statements
-from entities import Entitiy
+from entities import Entity
 from game import Game
 from rooms import Room, Map
 #yt
     
 #jayden
 if __name__ == "__main__":
-    print("skibidi toilet")
+    player = Entity(100, 100, 100)
+    _game = Game(player)
+    _game.gameloop()
 
 
 #kaydn
