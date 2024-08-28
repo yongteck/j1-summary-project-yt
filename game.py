@@ -1,23 +1,24 @@
-from rooms import Room, Map, dialogue
-from entities import Entity,Pokedex, moveset
-from inventory import item, itemref, inventory
-import math
+from rooms import Map, Dialogue
+from entities import Entity, Pokedex, Moveset
+from inventory import Itemref, Inventory
+
 
 class Game:
+
     def __init__(self):
         print("game has started")
         self.phase = "explore"
-        self.player = Entity("player",10,4,10,[]) 
-        self.inventory = inventory()
-    
+        self.player = Entity("player", 10, 4, 10, [])
+        self.inventory = Inventory()
+
     def gameloop(self):
         print("game is running")
         current = "1"
         _map = Map()
         _dex = Pokedex()
-        _refr = itemref()
-        dlg = dialogue()
-        ms = moveset()
+        _refr = Itemref()
+        dlg = Dialogue()
+        ms = Moveset()
         while self.phase != "end":
             room = _map.getRoom(current)
             print("-------\n\n-------")
@@ -40,7 +41,7 @@ class Game:
                     self.player.currsanity += 5
                 if eff == "guarded":
                     self.player.shield += 5
-                    
+
             #combat room
             if room.CheckRoomType() == "combat":
                 print("you have entered a combat room")
@@ -52,30 +53,31 @@ class Game:
                     monster.displaystats()
                     #player turn
                     if turn == "player":
-                        choice = input("choose moves: " + str(self.player.getmoves("P")))
+                        choice = input("choose moves: " +
+                                       str(self.player.getmoves("P")))
                         turn = "monster"
                         print(ms.getdesc(choice))
                         if choice == "hit":
                             monster.take_hit(self.player.currattack)
                         if choice == "defend":
-                            self.player.shield += self.player.maxhp//2
+                            self.player.shield += self.player.maxhp // 2
                         if choice == "adaptation":
                             self.player.currattack += 2
                     #monsters turn
                     elif turn == "monster":
                         choice = monster.getmoves("M")
-                        print("monster chose to:",choice)
+                        print("monster chose to:", choice)
                         print(ms.getdesc(choice))
                         turn = "player"
                         if choice == "hit":
                             self.player.take_hit(monster.currattack)
                         if choice == "defend":
-                            monster.shield += monster.maxhp//2
+                            monster.shield += monster.maxhp // 2
                         if choice == "trip":
                             monster.take_hit(1)
                         if choice == "integration x1.5":
-                            monster.currattack = monster.currattack*1.5 // 1
-                            monster.heal(monster.hp//2)
+                            monster.currattack = monster.currattack * 1.5 // 1
+                            monster.heal(monster.hp // 2)
                         if choice == "slamdunk":
                             self.player.hp -= monster.currattack
                             self.player.sanity -= 1
@@ -98,7 +100,7 @@ class Game:
                     print("room has already rewarded")
                 else:
                     print("rewarding")
-                    for item in room.CheckRoomItems():     
+                    for item in room.CheckRoomItems():
                         print("you got {}".format(item))
                         self.inventory.add_item(_refr.get_item(item))
                         room.items = []
@@ -115,12 +117,12 @@ class Game:
                     room.type = "explore"
                 else:
                     print(dlg.getlog("fgignore"))
-                print()   
+                print()
 
             #library1 code
             if room.type == "library1":
                 print(dlg.getlog("library1"))
-                books = ["adaptation","endread"]
+                books = ["adaptation", "endread"]
                 while True:
                     choice = input("what will you read? " + str(books))
                     if choice == "endread":
@@ -138,7 +140,7 @@ class Game:
                 self.player.hp = self.player.maxhp
                 self.player.sanity += 1
                 room.type = "explore"
-                  
+
             #looking at new rooms and inventory access
             choice = input("will you access inventory(i) or leave(l)")
             while True:
@@ -149,11 +151,7 @@ class Game:
                 elif choice == "l":
                     print("choose which room to go to: ")
                     for i in room.CheckNextRooms():
-                        print("- "+i)
+                        print("- " + i)
                     current = input("Enter your choice: ")
                 _map.update_room(room)
                 break
-            
-            
-
-    
