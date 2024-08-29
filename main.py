@@ -4,21 +4,55 @@ from rooms import Map, Dialogue
 from entities import Pokedex, Moveset
 from inventory import Itemref
 
+_dex = Pokedex()
+ms = Moveset()
+
+
+def show_room_info(room_id, type, description) -> None:
+    """Display room information about the given room."""
+    print("-------\n\n-------")
+    print("you are in room: ", room_id, "type: ", type)
+    print(description)
+    print()
+
+def player_turn(player, monster):
+    choice = input("choose moves: " +
+           str(player.getmoves("P")))
+    print(ms.getdesc(choice))
+    if choice == "hit":
+        monster.take_hit(player.currattack)
+    if choice == "defend":
+        player.shield += player.maxhp // 2
+    if choice == "adaptation":
+        player.currattack += 2
+
+def monster_turn(player, monster):
+    choice = monster.getmoves("M")
+    print("monster chose to:", choice)
+    print(ms.getdesc(choice))
+    if choice == "hit":
+        player.take_hit(monster.currattack)
+    if choice == "defend":
+        monster.shield += monster.maxhp // 2
+    if choice == "trip":
+        monster.take_hit(1)
+    if choice == "integration x1.5":
+        monster.currattack = monster.currattack * 1.5 // 1
+        monster.heal(monster.hp // 2)
+    if choice == "slamdunk":
+        player.hp -= monster.currattack
+        player.sanity -= 1
+
 
 def main(game):
     print("game is running")
     current = "1"
     _map = Map()
-    _dex = Pokedex()
     _refr = Itemref()
     dlg = Dialogue()
-    ms = Moveset()
     while game.phase != "end":
         room = _map.getRoom(current)
-        print("-------\n\n-------")
-        print("you are in room: ", room.CheckRoomId(), "type: ", room.type)
-        print(room.description)
-        print()
+        show_room_info(room.id, room.type, room.description)
         #change effects based off items
         game.player.effects = []
         for bag_item in game.inventory.bag:
@@ -47,34 +81,12 @@ def main(game):
                 monster.displaystats()
                 #player turn
                 if turn == "player":
-                    choice = input("choose moves: " +
-                                   str(game.player.getmoves("P")))
+                    player_turn(game.player, monster)
                     turn = "monster"
-                    print(ms.getdesc(choice))
-                    if choice == "hit":
-                        monster.take_hit(game.player.currattack)
-                    if choice == "defend":
-                        game.player.shield += game.player.maxhp // 2
-                    if choice == "adaptation":
-                        game.player.currattack += 2
                 #monsters turn
                 elif turn == "monster":
-                    choice = monster.getmoves("M")
-                    print("monster chose to:", choice)
-                    print(ms.getdesc(choice))
+                    monster_turn(game.player, monster)
                     turn = "player"
-                    if choice == "hit":
-                        game.player.take_hit(monster.currattack)
-                    if choice == "defend":
-                        monster.shield += monster.maxhp // 2
-                    if choice == "trip":
-                        monster.take_hit(1)
-                    if choice == "integration x1.5":
-                        monster.currattack = monster.currattack * 1.5 // 1
-                        monster.heal(monster.hp // 2)
-                    if choice == "slamdunk":
-                        game.player.hp -= monster.currattack
-                        game.player.sanity -= 1
                 if game.player.hp < 1:
                     game.phase = "end"
                     break
