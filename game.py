@@ -11,8 +11,8 @@ class Game:
         self.inventory = Inventory()
         self.enemies = {}
 
-    def add_enemy(self, entity: Entity) -> None:
+    def add_enemy(self, entity: entities.Entity) -> None:
         self.enemies[entity.name] = entity
 
-    def get_enemy(self, name: str) -> Entity:
+    def get_enemy(self, name: str) -> entities.Entity:
         return self.enemies[name]

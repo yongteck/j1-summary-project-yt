@@ -22,6 +22,7 @@ def reload():
     enemy = data["enemy"]
     effects = data["effects"]
     rooms = data["rooms"]
+    items = data["items"]
 
 
 _data = load(DATAFILE)
@@ -29,3 +30,4 @@ player = _data["player"]
 enemy = _data["enemy"]
 effects = _data["effects"]
 rooms = _data["rooms"]
+items = _data["items"]

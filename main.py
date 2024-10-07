@@ -5,9 +5,10 @@ import gamedata
 from rooms import Map, Dialogue
 from entities import Moveset
 import entities
-from inventory import Itemref
+import inventory
+# from inventory import Itemref
 
-_refr = Itemref()
+# _refr = Itemref()
 _map = Map()
 _map.setFromJson(gamedata.rooms)
 dlg = Dialogue()
@@ -106,9 +107,9 @@ def gamephase_rewards(game, room):
         print("room has already rewarded")
     else:
         print("rewarding")
-        for item in room.CheckRoomItems():
+        for itemname in room.CheckRoomItems():
             print("you got {}".format(item))
-            game.inventory.add_item(_refr.get_item(item))
+            game.inventory.add_item(inventory.create_item(itemname))
             room.items = []
         game.phase = "explore"
 

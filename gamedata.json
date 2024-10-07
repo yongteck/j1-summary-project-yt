@@ -103,5 +103,25 @@
             "items": [],
             "exits": [1]
         }
-    ]
+    ],
+    "items": {
+        "wooden sword": {
+            "name": "wooden sword",
+            "description": "a trusty wooden blade",
+            "effects": ["sharp"],
+            "states": ""
+        },
+        "wooden shield": {
+            "name": "wooden shield",
+            "description": "a basic defensive tool",
+            "effects": ["guarded"]
+            "states": ""
+        },
+        "pendant": {
+            "name": "pendant",
+            "description": "a locket with a blurred photo inside",
+            "effects": ["sane"],
+            "states": ""
+        }
+    }
 }
