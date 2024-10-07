@@ -82,7 +82,7 @@ def gamephase_rewards(game, room):
     else:
         print("rewarding")
         for itemname in room.CheckRoomItems():
-            print("you got {}".format(item))
+            print("you got {}".format(itemname))
             game.inventory.add_item(inventory.create_item(itemname))
             room.items = []
         game.phase = "explore"
