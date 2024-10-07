@@ -52,7 +52,7 @@ def enter_combat(game, room):
         target.displaystats()
         choice = actor.getmoves()
         print(ms.getdesc(choice))
-        combat_turn(actor, target, choice)
+        execute_action(choice, actor, target)
         actor, target = target, actor
     player.exit_combat()
     monster.exit_combat()
@@ -63,12 +63,13 @@ def enter_combat(game, room):
         room.type = "explore"
         game.phase = "rewards"
 
-def combat_turn(actor: entities.Entity, target: entities.Entity, choice: str) -> None:
+def execute_action(choice: str, actor: entities.Entity, target: entities.Entity | None = None) -> None:
     Action = action.get(choice)
     entityAction = Action(actor.stats)
     if isinstance(entityAction, action.SelfAction):
         entityAction.apply_effect(actor.stats)
     elif isinstance(entityAction, action.OtherAction):
+        assert target
         entityAction.apply_effect(target.stats)
     else:
         raise ValueError(f"{entityAction}: Invalid action")
@@ -115,9 +116,7 @@ def enter_fgalter(game, room):
     """Enter event room"""
     choice = input("will you sacrifice blood? (y/n)")
     if choice == "y":
-        Action = action.get("sacrifice")
-        entityAction = Action(game.player.stats)
-        entityAction.apply_effect(game.player.stats)
+        execute_action("sacrifice", game.player)
         print(dlg.getlog("fgsacrifice"))
         room.type = "explore"
     else:
@@ -134,9 +133,7 @@ def enter_library(game, room):
             break
         else:
             print(dlg.getlog(choice))
-            Action = action.get("read")
-            entityAction = Action(game.player.stats)
-            entityAction.apply_effect(game.player.stats)
+            execute_action("read", game.player)
             game.player.add_moves([choice])
             books.remove(choice)
     room.type = "explore"
@@ -144,9 +141,7 @@ def enter_library(game, room):
 def enter_campfire(game, room):
     """Enter campfire room."""
     print(dlg.getlog("campfire"))
-    Action = action.get("enter campfire")
-    entityAction = Action(game.player.stats)
-        entityAction.apply_effect(game.player.stats)
+    execute_action("enter campfire", game.player)
     room.type = "explore"
 
 def inventory_or_leave(game, room):
