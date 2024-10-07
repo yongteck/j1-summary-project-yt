@@ -47,35 +47,29 @@ def enter_combat(game, room):
     player_stat = player.get_stats()
     apply_inventory_effects(player_stat)
     monster_stat = monster.get_stats()
-    turn = "player"
-    while True:
+    while not (player.isdead() or monster.isdead()):
         #display
         game.player.displaystats()
         monster.displaystats()
+        actor, target = player_stat, monster_stat
         #player turn
-        if turn == "player":
+        if actor.name == "Player":
             choice = input("choose moves: " +
            str(player.getmoves("P")))
             print(ms.getdesc(choice))
-            combat_turn(player_stat, monster_stat, choice)
-            turn = "monster"
         #monsters turn
-        elif turn == "monster":
+        else:
             choice = monster.getmoves("M")
             print("monster chose to:", choice)
             print(ms.getdesc(choice))
-            combat_turn(monster_stat, player_stat, choice)
-            turn = "player"
-        if player.isdead():
-            game.phase = "end"
-            break
-        if monster.isdead():
-            print("you won the fight")
-            room.type = "explore"
-            game.phase = "rewards"
-            break
-        print()
-        print()
+        combat_turn(actor, target, choice)
+        actor, target = target, actor
+    if player.isdead():
+        game.phase = "end"
+    if monster.isdead():
+        print("you won the fight")
+        room.type = "explore"
+        game.phase = "rewards"
     player.update(player_stat)
     monster.update(monster_stat)
 
