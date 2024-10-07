@@ -10,6 +10,10 @@ class Stats:
         self.sanity = sanity
         self.shield = shield
 
+    def copy(self) -> "Stats":
+        """Return a copy of the stats"""
+        return Stats(self.hp, self.attack, self.sanity, self.shield)
+
 
 class Moveset:
 
@@ -34,14 +38,17 @@ class Entity:
         self.name = name
         self.stats = Stats(hp, attack, sanity, shield)
         # self.hp = hp
-        self.maxhp = hp
+        # self.maxhp = hp
         # self.attack = attack
-        self.currattack = attack
+        # self.currattack = attack
         # self.sanity = sanity
-        self.currsanity = sanity
+        # self.currsanity = sanity
         # self.shield = shield
         self.effects = []
         self.moves = moves
+        # Attributes for combat
+        self.original_stats = None
+        self.in_combat = False
 
     @property
     def hp(self) -> int:
@@ -71,7 +78,7 @@ class Entity:
             self.stats.shield -= value
 
     def get_stats(self) -> Stats:
-        return self.stats
+        return self.stats.copy()
 
     def heal(self, value):
         if self.hp + value > self.maxhp:
@@ -94,31 +101,70 @@ class Entity:
     def isdead(self) -> bool:
         return self.hp <= 0
 
-    def getmoves(self, person):
-        if person == "P":
-            return [i for i in self.moves]
-        if person == "M":
-            return random.choice(self.moves)
+    def getmoves(self) -> str:
+        """Subclasseses should override this method"""
+        raise NotImplementedError
 
     def add_moves(self, moves):
         self.moves += moves
 
     def displaystats(self):
+        assert self.original_stats
         print(
             "{} - hp: {}/{}, shield: {}, attack: {}/{}, sanity: {}/{}".format(
-                self.name, self.hp, self.maxhp, self.shield, self.currattack,
-                self.attack, self.currsanity, self.sanity))
+                self.name, self.hp, self.maxhp, self.shield, self.attack,
+                self.original_stats.attack, self.sanity, self.original_stats.sanity))
 
     def displayeffects(self):
         print("effects: " + str(self.effects))
 
-    def update(self, stats: Stats) -> None:
-        self.stats.hp = stats.hp
-        self.stats.maxhp = stats.maxhp
+    def enter_combat(self) -> None:
+        """Enter combat mode.
+        some stats modified during combat will be reset after exiting combat.
+        """
+        if self.in_combat:
+            raise ValueError("Already in combat")
+        self.original_stats = self.get_stats()
+        self.in_combat = True
+
+    def exit_combat(self) -> None:
+        """Exit combat mode, restoring temporary stats."""
+        if not self.in_combat:
+            raise ValueError("Not in combat")
+        assert self.original_stats
+        combat_stats, self.stats = self.stats, self.original_stats
+        self.in_combat = False
+        # Update stats from combat
+        self.stats.hp = combat_stats.hp
+        self.stats.maxhp = combat_stats.maxhp
         # Attack, sanity, shield do not carry over
+
+
+class Player(Entity):
+    def getmoves(self) -> str:
+        moves = ", ".join(self.moves)
+        choice = input(f"choose moves {moves}:")
+        while choice not in self.moves:
+            choice = input(f"choose moves {moves}:")
+        return choice
+
+
+class Monster(Entity):
+    def getmoves(self) -> str:
+        return random.choice(self.moves)
 
 
 def create_entity(jsondata: dict) -> Entity:
     """Creates an entity from json data"""
     return Entity(jsondata["name"], jsondata["hp"], jsondata["attack"],
+                  jsondata['sanity'], jsondata["shield"], jsondata["moves"])
+
+def create_player(jsondata: dict) -> Entity:
+    """Creates an entity from json data"""
+    return Player(jsondata["name"], jsondata["hp"], jsondata["attack"],
+                  jsondata['sanity'], jsondata["shield"], jsondata["moves"])
+
+def create_monster(jsondata: dict) -> Entity:
+    """Creates an entity from json data"""
+    return Monster(jsondata["name"], jsondata["hp"], jsondata["attack"],
                   jsondata['sanity'], jsondata["shield"], jsondata["moves"])

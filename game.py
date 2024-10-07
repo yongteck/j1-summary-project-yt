@@ -7,7 +7,7 @@ class Game:
 
     def __init__(self):
         self.phase = "explore"
-        self.player = entities.create_entity(gamedata.player)
+        self.player = entities.create_player(gamedata.player)
         self.inventory = Inventory()
         self.enemies = {}
 

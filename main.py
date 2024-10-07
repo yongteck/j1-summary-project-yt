@@ -21,7 +21,7 @@ def show_room_info(room_id, type, description) -> None:
     print(description)
     print()
 
-def apply_inventory_effects(stats: entities.Stats):
+def apply_inventory_effects(game, stats: entities.Stats):
     """Update player stats based on effect of inventory items"""
     # TODO: Refactor to make effect updates dynamic
     effects = game.inventory.get_item_effects()
@@ -34,7 +34,6 @@ def apply_inventory_effects(stats: entities.Stats):
         if effect == "guarded":
             stats.shield += 5
 
-
 def enter_combat(game, room):
     """Enter a combat room"""
     player = game.player
@@ -42,44 +41,35 @@ def enter_combat(game, room):
     # For now there is only one enemy per room
     monster = game.get_enemy(monsters[0])
     # Stats during combat are temporary and should not be applied to the entity directly
-    # Instead, we create a copy of the stats that are modified instead
     # Changes to permanent stats are applied back to the entity after combat
-    player_stat = player.get_stats()
-    apply_inventory_effects(player_stat)
-    monster_stat = monster.get_stats()
+    player.enter_combat()
+    apply_inventory_effects(game, player.stats)
+    monster.enter_combat()
+    actor, target = player, monster
     while not (player.isdead() or monster.isdead()):
         #display
-        game.player.displaystats()
-        monster.displaystats()
-        actor, target = player_stat, monster_stat
-        #player turn
-        if actor.name == "Player":
-            choice = input("choose moves: " +
-           str(player.getmoves("P")))
-            print(ms.getdesc(choice))
-        #monsters turn
-        else:
-            choice = monster.getmoves("M")
-            print("monster chose to:", choice)
-            print(ms.getdesc(choice))
+        actor.displaystats()
+        target.displaystats()
+        choice = actor.getmoves()
+        print(ms.getdesc(choice))
         combat_turn(actor, target, choice)
         actor, target = target, actor
+    player.exit_combat()
+    monster.exit_combat()
     if player.isdead():
         game.phase = "end"
-    if monster.isdead():
+    elif monster.isdead():
         print("you won the fight")
         room.type = "explore"
         game.phase = "rewards"
-    player.update(player_stat)
-    monster.update(monster_stat)
 
-def combat_turn(actor: entities.Stats, target: entities.Stats, choice: str) -> None:
+def combat_turn(actor: entities.Entity, target: entities.Entity, choice: str) -> None:
     Action = action.get(choice)
-    entityAction = Action(actor)
+    entityAction = Action(actor.stats)
     if isinstance(entityAction, action.SelfAction):
-        entityAction.apply_effect(actor)
+        entityAction.apply_effect(actor.stats)
     elif isinstance(entityAction, action.OtherAction):
-        entityAction.apply_effect(target)
+        entityAction.apply_effect(target.stats)
     else:
         raise ValueError(f"{entityAction}: Invalid action")
 
@@ -200,7 +190,7 @@ def main(game):
 if __name__ == "__main__":
     _game = Game()
     for enemydata in gamedata.enemy.values():
-        _game.add_enemy(entities.create_entity(enemydata))
+        _game.add_enemy(entities.create_monster(enemydata))
     main(_game)
 
 #kaydn
