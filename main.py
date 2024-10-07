@@ -41,6 +41,9 @@ def enter_combat(game, room):
     monsters = room.CheckRoomMonsters()
     # For now there is only one enemy per room
     monster = game.get_enemy(monsters[0])
+    # Stats during combat are temporary and should not be applied to the entity directly
+    # Instead, we create a copy of the stats that are modified instead
+    # Changes to permanent stats are applied back to the entity after combat
     player_stat = player.get_stats()
     apply_inventory_effects(player_stat)
     monster_stat = monster.get_stats()
@@ -54,14 +57,14 @@ def enter_combat(game, room):
             choice = input("choose moves: " +
            str(player.getmoves("P")))
             print(ms.getdesc(choice))
-            player_turn(game.player, monster, choice)
+            combat_turn(player_stat, monster_stat, choice)
             turn = "monster"
         #monsters turn
         elif turn == "monster":
             choice = monster.getmoves("M")
             print("monster chose to:", choice)
             print(ms.getdesc(choice))
-            monster_turn(game.player, monster, choice)
+            combat_turn(monster_stat, player_stat, choice)
             turn = "player"
         if player.isdead():
             game.phase = "end"
@@ -76,27 +79,37 @@ def enter_combat(game, room):
     player.update(player_stat)
     monster.update(monster_stat)
 
-def player_turn(player_stat, monster_stat, choice):
-    """Player's turn in combat"""
+def combat_turn(actor: entities.Stats, target: entities.Stats, choice: str) -> None:
     Action = action.get(choice)
-    entityAction = Action(player_stat)
+    entityAction = Action(actor)
     if isinstance(entityAction, action.SelfAction):
-        entityAction.apply_effect(player_stat)
+        entityAction.apply_effect(actor)
     elif isinstance(entityAction, action.OtherAction):
-        entityAction.apply_effect(monster_stat)
+        entityAction.apply_effect(target)
     else:
         raise ValueError(f"{entityAction}: Invalid action")
 
-def monster_turn(player_stat, monster_stat, choice):
-    """Monster's turn in combat"""
-    Action = action.get(choice)
-    entityAction = Action(monster_stat)
-    if isinstance(entityAction, action.SelfAction):
-        entityAction.apply_effect(monster_stat)
-    elif isinstance(entityAction, action.OtherAction):
-        entityAction.apply_effect(player_stat)
-    else:
-        raise ValueError(f"{entityAction}: Invalid action")
+# def player_turn(player_stat, monster_stat, choice):
+#     """Player's turn in combat"""
+#     Action = action.get(choice)
+#     entityAction = Action(player_stat)
+#     if isinstance(entityAction, action.SelfAction):
+#         entityAction.apply_effect(player_stat)
+#     elif isinstance(entityAction, action.OtherAction):
+#         entityAction.apply_effect(monster_stat)
+#     else:
+#         raise ValueError(f"{entityAction}: Invalid action")
+
+# def monster_turn(player_stat, monster_stat, choice):
+#     """Monster's turn in combat"""
+#     Action = action.get(choice)
+#     entityAction = Action(monster_stat)
+#     if isinstance(entityAction, action.SelfAction):
+#         entityAction.apply_effect(monster_stat)
+#     elif isinstance(entityAction, action.OtherAction):
+#         entityAction.apply_effect(player_stat)
+#     else:
+#         raise ValueError(f"{entityAction}: Invalid action")
 
 def enter_treasure(game, room):
     """Enter a treasure room."""
