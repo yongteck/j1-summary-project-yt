@@ -1,5 +1,6 @@
 # Import statements
 from game import Game
+import gamedata
 from rooms import Map, Dialogue
 from entities import Pokedex, Moveset
 from inventory import Itemref
@@ -7,6 +8,7 @@ from inventory import Itemref
 _dex = Pokedex()
 _refr = Itemref()
 _map = Map()
+_map.setFromJson(gamedata.rooms)
 dlg = Dialogue()
 ms = Moveset()
 
