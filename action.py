@@ -58,7 +58,7 @@ class Adaptation(SelfAction):
     """Adapt to an enemy's weaknesses. The effect is applied to the actor's
     stats."""
     name = "adaptation"
-    description = "Adapt to the enemy's weaknesses"
+    description = "you comprehend the concepts behind its structure"
 
     def apply_effect(self, stat: entities.Stats) -> None:
         stat.attack += 2
