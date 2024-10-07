@@ -2,6 +2,8 @@
 
 Module for encapsulating actions and effects in the game.
 """
+from typing import Type
+
 import entities
 
 
@@ -44,11 +46,11 @@ class _TakeDamage(SelfAction):
     def apply_effect(self, stat: entities.Stats) -> None:
         # Deal damage to shield first
         while stat.shield:  # is not 0
-            self.damage -= 1
+            self.value -= 1
             stat.shield -= 1
         # Remaining damage is dealt to hp
-        while self.damage and stat.hp:  # is not 0
-            self.damage -= 1
+        while self.value and stat.hp:  # is not 0
+            self.value -= 1
             stat.hp -= 1
 
 
@@ -80,12 +82,11 @@ class Heal(SelfAction):
         super().__init__("heal", f"heal {value} hp")
         self.value = value
 
-    def apply_effect(self, actor: entities.Actor) -> None:
-        while self.value and stat.hp:
-        if self.hp + value > self.maxhp:
-            self.stats.hp = self.maxhp
-        else:
-            self.stats.hp += value
+    def apply_effect(self, stat: entities.Stats) -> None:
+        while self.value and stat.hp < stat.maxhp:
+            stat.hp += 1
+            self.value -= 1
+        self.value = 0
 
 
 class Hit(OtherAction):
@@ -98,7 +99,7 @@ class Hit(OtherAction):
         self.damage = damage
 
     def apply_effect(self, stat: entities.Stats) -> None:
-        get("take damage")(self.damage).apply_effect(stat)
+        _TakeDamage(self.damage).apply_effect(stat)
 
 
 class IntegrationOneDotFive(SelfAction):
@@ -109,7 +110,7 @@ class IntegrationOneDotFive(SelfAction):
 
     def apply_effect(self, stat: entities.Stats) -> None:
         stat.attack += stat.attack // 2
-        get("heal").apply_effect(stat)
+        Heal(stat.hp // 2).apply_effect(stat)
 
 
 class Sacrifice(SelfAction):
@@ -134,7 +135,7 @@ class SlamDunk(OtherAction):
         self.damage = damage
 
     def apply_effect(self, stat: entities.Stats) -> None:
-        get("take damage")(self.damage).apply_effect(stat)
+        _TakeDamage(self.damage).apply_effect(stat)
         stat.sanity -= 1
 
 
@@ -149,7 +150,7 @@ class Trip(SelfAction):
         stat.hp -= 1
 
 
-def get(name: str) -> Type[Action]:
+def get(name: str):
     """A getter method for the action class"""
     if name == "adaptation":
         return Adaptation
