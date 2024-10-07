@@ -1,5 +1,6 @@
 # Import statements
 from game import Game
+import action
 import gamedata
 from rooms import Map, Dialogue
 from entities import Moveset
@@ -71,12 +72,21 @@ def enter_combat(game, room):
 
 def player_turn(player, monster):
     """Player's turn in combat"""
+    player_stat = player.get_stat()
+    action.apply_effects(player_stat, player.effects)
+    monster_stat = monster.get_stat()
+    action.apply_effects(monster_stat, monster.effects)
     choice = input("choose moves: " +
            str(player.getmoves("P")))
     print(ms.getdesc(choice))
     if choice == "hit":
-        monster.take_hit(player.currattack)
+        PlayerAction = action.get(choice)
+        playeraction = PlayerAction(player_stat.attack)
+        playeraction.apply_effect(monster_stat)
     if choice == "defend":
+        PlayerAction = action.get(choice)
+        playeraction = PlayerAction()
+        playeraction.apply_effect(player_stat)
         player.shield += player.maxhp // 2
     if choice == "adaptation":
         player.currattack += 2
