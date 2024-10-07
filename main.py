@@ -37,9 +37,13 @@ def apply_inventory_effects(stats: entities.Stats):
 
 def enter_combat(game, room):
     """Enter a combat room"""
+    player = game.player
     monsters = room.CheckRoomMonsters()
     # For now there is only one enemy per room
-    monster = game.get_enemy(monsters[0]) 
+    monster = game.get_enemy(monsters[0])
+    player_stat = player.get_stats()
+    apply_inventory_effects(player_stat)
+    monster_stat = monster.get_stats()
     turn = "player"
     while True:
         #display
@@ -47,11 +51,14 @@ def enter_combat(game, room):
         monster.displaystats()
         #player turn
         if turn == "player":
-            player_turn(game.player, monster)
+            choice = input("choose moves: " +
+           str(player.getmoves("P")))
+            player_turn(game.player, monster, choice)
             turn = "monster"
         #monsters turn
         elif turn == "monster":
-            monster_turn(game.player, monster)
+            choice = monster.getmoves("M")
+            monster_turn(game.player, monster, choice)
             turn = "player"
         if game.player.hp < 1:
             game.phase = "end"
@@ -64,14 +71,12 @@ def enter_combat(game, room):
         print()
         print()
 
-def player_turn(player, monster):
+def player_turn(player, monster, choice):
     """Player's turn in combat"""
     player_stat = player.get_stats()
     apply_inventory_effects(player_stat)
     monster_stat = monster.get_stats()
 
-    choice = input("choose moves: " +
-           str(player.getmoves("P")))
     print(ms.getdesc(choice))
     if choice == "hit":
         Action = action.get(choice)
@@ -88,13 +93,12 @@ def player_turn(player, monster):
     player.update(player_stat)
     monster.update(monster_stat)
 
-def monster_turn(player, monster):
+def monster_turn(player, monster, choice):
     """Monster's turn in combat"""
     player_stat = player.get_stats()
     apply_inventory_effects(player_stat)
     monster_stat = monster.get_stats()
 
-    choice = monster.getmoves("M")
     print("monster chose to:", choice)
     print(ms.getdesc(choice))
     if choice == "hit":
