@@ -70,6 +70,9 @@ class Entity:
         else:
             self.stats.shield -= value
 
+    def get_stats(self) -> Stats:
+        return self.stats
+
     def heal(self, value):
         if self.hp + value > self.maxhp:
             self.stats.hp = self.maxhp
@@ -108,6 +111,11 @@ class Entity:
 
     def displayeffects(self):
         print("effects: " + str(self.effects))
+
+    def update(self, stats: Stats) -> None:
+        self.stats.hp = stats.hp
+        self.stats.maxhp = stats.maxhp
+        # Attack, sanity, shield do not carry over
 
 
 def create_entity(jsondata: dict) -> Entity:

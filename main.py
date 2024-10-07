@@ -21,24 +21,18 @@ def show_room_info(room_id, type, description) -> None:
     print(description)
     print()
 
-def update_stats(game):
-    """Update player effects and stats"""
+def apply_inventory_effects(stats: entities.Stats):
+    """Update player stats based on effect of inventory items"""
     # TODO: Refactor to make effect updates dynamic
-    game.player.effects = []
-    for bag_item in game.inventory.bag:
-        game.player.add_effects(bag_item.check_effects())
-    #reset stats due to effects
-    game.player.currattack = game.player.attack
-    game.player.currsanity = game.player.sanity
-    game.shield = 0
+    effects = game.inventory.get_item_effects()
     #change stats based off effects
-    for eff in game.player.effects:
-        if eff == "sharp":
-            game.player.currattack += 2
-        if eff == "sane":
-            game.player.currsanity += 5
-        if eff == "guarded":
-            game.player.shield += 5
+    for effect in effects:
+        if effect == "sharp":
+            stats.attack += 2
+        if effect == "sane":
+            stats.sanity += 5
+        if effect == "guarded":
+            stats.shield += 5
 
 
 def enter_combat(game, room):
@@ -72,42 +66,59 @@ def enter_combat(game, room):
 
 def player_turn(player, monster):
     """Player's turn in combat"""
-    player_stat = player.get_stat()
-    action.apply_effects(player_stat, player.effects)
-    monster_stat = monster.get_stat()
-    action.apply_effects(monster_stat, monster.effects)
+    player_stat = player.get_stats()
+    apply_inventory_effects(player_stat)
+    monster_stat = monster.get_stats()
+
     choice = input("choose moves: " +
            str(player.getmoves("P")))
     print(ms.getdesc(choice))
     if choice == "hit":
-        PlayerAction = action.get(choice)
-        playeraction = PlayerAction(player_stat.attack)
-        playeraction.apply_effect(monster_stat)
+        Action = action.get(choice)
+        entityAction = Action(player_stat)
+        entityAction.apply_effect(monster_stat)
     if choice == "defend":
-        PlayerAction = action.get(choice)
-        playeraction = PlayerAction()
-        playeraction.apply_effect(player_stat)
-        player.shield += player.maxhp // 2
+        Action = action.get(choice)
+        entityAction = Action(player_stat)
+        entityAction.apply_effect(player_stat)
     if choice == "adaptation":
-        player.currattack += 2
+        Action = action.get(choice)
+        entityAction = Action(player_stat)
+        entityAction.apply_effect(player_stat)
+    player.update(player_stat)
+    monster.update(monster_stat)
 
 def monster_turn(player, monster):
     """Monster's turn in combat"""
+    player_stat = player.get_stats()
+    apply_inventory_effects(player_stat)
+    monster_stat = monster.get_stats()
+
     choice = monster.getmoves("M")
     print("monster chose to:", choice)
     print(ms.getdesc(choice))
     if choice == "hit":
-        player.take_hit(monster.currattack)
+        Action = action.get(choice)
+        entityAction = Action(monster_stat)
+        entityAction.apply_effect(player_stat)
     if choice == "defend":
-        monster.shield += monster.maxhp // 2
+        Action = action.get(choice)
+        entityAction = Action(monster_stat)
+        entityAction.apply_effect(monster_stat)
     if choice == "trip":
-        monster.take_hit(1)
+        Action = action.get(choice)
+        entityAction = Action(monster_stat)
+        entityAction.apply_effect(monster_stat)
     if choice == "integration x1.5":
-        monster.currattack = monster.currattack * 1.5 // 1
-        monster.heal(monster.hp // 2)
+        Action = action.get(choice)
+        entityAction = Action(monster_stat)
+        entityAction.apply_effect(monster_stat)
     if choice == "slamdunk":
-        player.hp -= monster.currattack
-        player.sanity -= 1
+        Action = action.get(choice)
+        entityAction = Action(monster_stat)
+        entityAction.apply_effect(player_stat)
+    player.update(player_stat)
+    monster.update(monster_stat)
 
 def enter_treasure(game, room):
     """Enter a treasure room."""
@@ -183,8 +194,6 @@ def main(game):
     while game.phase != "end":
         room = _map.getRoom(current)
         show_room_info(room.id, room.type, room.description)
-
-        update_stats(game)
         if room.type == "combat":
             print("you have entered a combat room")
             enter_combat(game, room)

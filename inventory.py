@@ -66,3 +66,10 @@ class Inventory:
 
     def display(self):
         print("inventory contains " + str([i.name for i in self.bag]))
+
+    def get_item_effects(self) -> list[str]:
+        effects = set()
+        for bag_item in self.bag:
+            for effect in bag_item.check_effects():
+                effects.add(effect)
+        return list(effects)
