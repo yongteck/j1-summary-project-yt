@@ -53,31 +53,31 @@ def enter_combat(game, room):
         if turn == "player":
             choice = input("choose moves: " +
            str(player.getmoves("P")))
+            print(ms.getdesc(choice))
             player_turn(game.player, monster, choice)
             turn = "monster"
         #monsters turn
         elif turn == "monster":
             choice = monster.getmoves("M")
+            print("monster chose to:", choice)
+            print(ms.getdesc(choice))
             monster_turn(game.player, monster, choice)
             turn = "player"
-        if game.player.hp < 1:
+        if player.isdead():
             game.phase = "end"
             break
-        if monster.hp < 1:
+        if monster.isdead():
             print("you won the fight")
             room.type = "explore"
             game.phase = "rewards"
             break
         print()
         print()
+    player.update(player_stat)
+    monster.update(monster_stat)
 
-def player_turn(player, monster, choice):
+def player_turn(player_stat, monster_stat, choice):
     """Player's turn in combat"""
-    player_stat = player.get_stats()
-    apply_inventory_effects(player_stat)
-    monster_stat = monster.get_stats()
-
-    print(ms.getdesc(choice))
     if choice == "hit":
         Action = action.get(choice)
         entityAction = Action(player_stat)
@@ -90,17 +90,9 @@ def player_turn(player, monster, choice):
         Action = action.get(choice)
         entityAction = Action(player_stat)
         entityAction.apply_effect(player_stat)
-    player.update(player_stat)
-    monster.update(monster_stat)
 
-def monster_turn(player, monster, choice):
+def monster_turn(player_stat, monster_stat, choice):
     """Monster's turn in combat"""
-    player_stat = player.get_stats()
-    apply_inventory_effects(player_stat)
-    monster_stat = monster.get_stats()
-
-    print("monster chose to:", choice)
-    print(ms.getdesc(choice))
     if choice == "hit":
         Action = action.get(choice)
         entityAction = Action(monster_stat)
@@ -121,8 +113,6 @@ def monster_turn(player, monster, choice):
         Action = action.get(choice)
         entityAction = Action(monster_stat)
         entityAction.apply_effect(player_stat)
-    player.update(player_stat)
-    monster.update(monster_stat)
 
 def enter_treasure(game, room):
     """Enter a treasure room."""
