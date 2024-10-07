@@ -196,7 +196,7 @@ def main(game):
 if __name__ == "__main__":
     _game = Game()
     for enemydata in gamedata.enemy.values():
-        _game.add_enemy(entities.create_enemy(enemydata))
+        _game.add_enemy(entities.create_entity(enemydata))
     main(_game)
 
 #kaydn

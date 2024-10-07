@@ -79,7 +79,7 @@ class Entity:
         print("effects: " + str(self.effects))
 
 
-def create_enemy(jsondata: dict) -> Entity:
+def create_entity(jsondata: dict) -> Entity:
     """Creates an entity from json data"""
     return Entity(jsondata["name"], jsondata["hp"], jsondata["attack"],
                   jsondata['sanity'], jsondata["shield"], jsondata["moves"])

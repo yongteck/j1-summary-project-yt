@@ -1,4 +1,5 @@
-from entities import Entity
+import entities
+import gamedata
 from inventory import Inventory
 
 
@@ -6,7 +7,7 @@ class Game:
 
     def __init__(self):
         self.phase = "explore"
-        self.player = Entity("player", 10, 4, 10, [])
+        self.player = entities.create_entity(gamedata.player)
         self.inventory = Inventory()
         self.enemies = {}
 
