@@ -2,10 +2,10 @@
 from game import Game
 import gamedata
 from rooms import Map, Dialogue
-from entities import Pokedex, Moveset
+from entities import Moveset
+import entities
 from inventory import Itemref
 
-_dex = Pokedex()
 _refr = Itemref()
 _map = Map()
 _map.setFromJson(gamedata.rooms)
@@ -42,7 +42,9 @@ def update_stats(game):
 
 def enter_combat(game, room):
     """Enter a combat room"""
-    monster = _dex.getMonster(room.CheckRoomMonsters())
+    monsters = room.CheckRoomMonsters()
+    # For now there is only one enemy per room
+    monster = game.get_enemy(monsters[0]) 
     turn = "player"
     while True:
         #display
@@ -193,6 +195,8 @@ def main(game):
 #jayden
 if __name__ == "__main__":
     _game = Game()
+    for enemydata in gamedata.enemy.values():
+        _game.add_enemy(entities.create_enemy(enemydata))
     main(_game)
 
 #kaydn

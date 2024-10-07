@@ -20,7 +20,7 @@ class Moveset:
 
 class Entity:
 
-    def __init__(self, name, hp, attack, sanity, add_move):
+    def __init__(self, name, hp, attack, sanity, shield, moves):
         self.name = name
         self.hp = hp
         self.maxhp = hp
@@ -28,9 +28,9 @@ class Entity:
         self.currattack = attack
         self.sanity = sanity
         self.currsanity = sanity
-        self.shield = 0
+        self.shield = shield
         self.effects = []
-        self.moves = ["hit", "defend"] + add_move
+        self.moves = moves
 
     def take_hit(self, value):
         if value > self.shield:
@@ -79,15 +79,7 @@ class Entity:
         print("effects: " + str(self.effects))
 
 
-class Pokedex:
-
-    def __init__(self):
-        self.store = {}
-        self.store["goblin"] = Entity("goblin", 10, 2, 5, ["trip"])
-        self.store["ny math homework"] = Entity("ny math homework", 25, 3, 5,
-                                                ["integration x1.5"])
-        self.store["lebron james"] = Entity("lebron james", 10, 6, 20,
-                                            ["slamdunk"])
-
-    def getMonster(self, id):
-        return self.store[id]
+def create_enemy(jsondata: dict) -> Entity:
+    """Creates an entity from json data"""
+    return Entity(jsondata["name"], jsondata["hp"], jsondata["attack"],
+                  jsondata['sanity'], jsondata["shield"], jsondata["moves"])
