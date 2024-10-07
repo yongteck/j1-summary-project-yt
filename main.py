@@ -3,16 +3,12 @@ from game import Game
 import action
 import gamedata
 from rooms import Map, Dialogue
-from entities import Moveset
 import entities
 import inventory
-# from inventory import Itemref
 
-# _refr = Itemref()
 _map = Map()
 _map.setFromJson(gamedata.rooms)
 dlg = Dialogue()
-ms = Moveset()
 
 
 def show_room_info(room_id, type, description) -> None:
@@ -74,28 +70,6 @@ def execute_action(choice: str, actor: entities.Entity, target: entities.Entity 
         entityAction.apply_effect(target.stats)
     else:
         raise ValueError(f"{entityAction}: Invalid action")
-
-# def player_turn(player_stat, monster_stat, choice):
-#     """Player's turn in combat"""
-#     Action = action.get(choice)
-#     entityAction = Action(player_stat)
-#     if isinstance(entityAction, action.SelfAction):
-#         entityAction.apply_effect(player_stat)
-#     elif isinstance(entityAction, action.OtherAction):
-#         entityAction.apply_effect(monster_stat)
-#     else:
-#         raise ValueError(f"{entityAction}: Invalid action")
-
-# def monster_turn(player_stat, monster_stat, choice):
-#     """Monster's turn in combat"""
-#     Action = action.get(choice)
-#     entityAction = Action(monster_stat)
-#     if isinstance(entityAction, action.SelfAction):
-#         entityAction.apply_effect(monster_stat)
-#     elif isinstance(entityAction, action.OtherAction):
-#         entityAction.apply_effect(player_stat)
-#     else:
-#         raise ValueError(f"{entityAction}: Invalid action")
 
 def enter_treasure(game, room):
     """Enter a treasure room."""

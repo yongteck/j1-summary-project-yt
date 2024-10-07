@@ -1,5 +1,6 @@
 import gamedata
 
+
 class Item:
 
     def __init__(self, name, descriptions, effects, states):
@@ -25,24 +26,6 @@ class Item:
 
     def set_states(self, state):
         self.states = state
-
-
-# class Itemref:
-
-#     def __init__(self):
-#         self.store = {}
-#         self.store["wooden sword"] = Item("wooden sword",
-#                                           "a trusty wooden blade", ["sharp"],
-#                                           "")
-#         self.store["wooden shield"] = Item("wooden shield",
-#                                            "a basic defensive tool",
-#                                            ["guarded"], "")
-#         self.store["pendant"] = Item("pendant",
-#                                      "a locket with a blurred photo inside",
-#                                      ["sane"], "")
-
-#     def get_item(self, itemname):
-#         return self.store[itemname]
 
 
 class Inventory:

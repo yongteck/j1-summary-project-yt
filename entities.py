@@ -3,6 +3,7 @@ import random
 
 class Stats:
     """Encapsulates the stats of an entity"""
+
     def __init__(self, hp: int, attack: int, sanity: int, shield: int):
         self.hp = hp
         self.maxhp = hp
@@ -15,35 +16,12 @@ class Stats:
         return Stats(self.hp, self.attack, self.sanity, self.shield)
 
 
-class Moveset:
-
-    def __init__(self):
-        self.notebook = {}
-        self.notebook["hit"] = "it hits"
-        self.notebook["defend"] = "it defends"
-        self.notebook["trip"] = "it falls onto the ground"
-        self.notebook[
-            "integration x1.5"] = "enemys polynomial degree increases, amplifying stats by 1.5x"
-        self.notebook[
-            "adaptation"] = "you comprehend the concepts behind its structure"
-        self.notebook["slamdunk"] = "lebron dunks on you aura -1000"
-
-    def getdesc(self, id):
-        return self.notebook[id]
-
-
 class Entity:
 
-    def __init__(self, name, hp, attack, sanity, shield, moves):
+    def __init__(self, name: int, hp: int, attack: int, sanity: int,
+                 shield: int, moves: list[str]):
         self.name = name
         self.stats = Stats(hp, attack, sanity, shield)
-        # self.hp = hp
-        # self.maxhp = hp
-        # self.attack = attack
-        # self.currattack = attack
-        # self.sanity = sanity
-        # self.currsanity = sanity
-        # self.shield = shield
         self.effects = []
         self.moves = moves
         # Attributes for combat
@@ -113,7 +91,8 @@ class Entity:
         print(
             "{} - hp: {}/{}, shield: {}, attack: {}/{}, sanity: {}/{}".format(
                 self.name, self.hp, self.maxhp, self.shield, self.attack,
-                self.original_stats.attack, self.sanity, self.original_stats.sanity))
+                self.original_stats.attack, self.sanity,
+                self.original_stats.sanity))
 
     def displayeffects(self):
         print("effects: " + str(self.effects))
@@ -141,6 +120,7 @@ class Entity:
 
 
 class Player(Entity):
+
     def getmoves(self) -> str:
         moves = ", ".join(self.moves)
         choice = input(f"choose moves {moves}:")
@@ -150,6 +130,7 @@ class Player(Entity):
 
 
 class Monster(Entity):
+
     def getmoves(self) -> str:
         return random.choice(self.moves)
 
@@ -159,12 +140,14 @@ def create_entity(jsondata: dict) -> Entity:
     return Entity(jsondata["name"], jsondata["hp"], jsondata["attack"],
                   jsondata['sanity'], jsondata["shield"], jsondata["moves"])
 
+
 def create_player(jsondata: dict) -> Entity:
     """Creates an entity from json data"""
     return Player(jsondata["name"], jsondata["hp"], jsondata["attack"],
                   jsondata['sanity'], jsondata["shield"], jsondata["moves"])
 
+
 def create_monster(jsondata: dict) -> Entity:
     """Creates an entity from json data"""
     return Monster(jsondata["name"], jsondata["hp"], jsondata["attack"],
-                  jsondata['sanity'], jsondata["shield"], jsondata["moves"])
+                   jsondata['sanity'], jsondata["shield"], jsondata["moves"])
