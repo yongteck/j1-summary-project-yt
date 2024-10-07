@@ -78,41 +78,25 @@ def enter_combat(game, room):
 
 def player_turn(player_stat, monster_stat, choice):
     """Player's turn in combat"""
-    if choice == "hit":
-        Action = action.get(choice)
-        entityAction = Action(player_stat)
+    Action = action.get(choice)
+    entityAction = Action(player_stat)
+    if isinstance(entityAction, action.SelfAction):
+        entityAction.apply_effect(player_stat)
+    elif isinstance(entityAction, action.OtherAction):
         entityAction.apply_effect(monster_stat)
-    if choice == "defend":
-        Action = action.get(choice)
-        entityAction = Action(player_stat)
-        entityAction.apply_effect(player_stat)
-    if choice == "adaptation":
-        Action = action.get(choice)
-        entityAction = Action(player_stat)
-        entityAction.apply_effect(player_stat)
+    else:
+        raise ValueError(f"{entityAction}: Invalid action")
 
 def monster_turn(player_stat, monster_stat, choice):
     """Monster's turn in combat"""
-    if choice == "hit":
-        Action = action.get(choice)
-        entityAction = Action(monster_stat)
+    Action = action.get(choice)
+    entityAction = Action(monster_stat)
+    if isinstance(entityAction, action.SelfAction):
+        entityAction.apply_effect(monster_stat)
+    elif isinstance(entityAction, action.OtherAction):
         entityAction.apply_effect(player_stat)
-    if choice == "defend":
-        Action = action.get(choice)
-        entityAction = Action(monster_stat)
-        entityAction.apply_effect(monster_stat)
-    if choice == "trip":
-        Action = action.get(choice)
-        entityAction = Action(monster_stat)
-        entityAction.apply_effect(monster_stat)
-    if choice == "integration x1.5":
-        Action = action.get(choice)
-        entityAction = Action(monster_stat)
-        entityAction.apply_effect(monster_stat)
-    if choice == "slamdunk":
-        Action = action.get(choice)
-        entityAction = Action(monster_stat)
-        entityAction.apply_effect(player_stat)
+    else:
+        raise ValueError(f"{entityAction}: Invalid action")
 
 def enter_treasure(game, room):
     """Enter a treasure room."""
