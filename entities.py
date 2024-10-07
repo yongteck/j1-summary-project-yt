@@ -1,6 +1,16 @@
 import random
 
 
+class Stats:
+    """Encapsulates the stats of an entity"""
+    def __init__(self, hp: int, attack: int, sanity: int, shield: int):
+        self.hp = hp
+        self.maxhp = hp
+        self.attack = attack
+        self.sanity = sanity
+        self.shield = shield
+
+
 class Moveset:
 
     def __init__(self):
@@ -22,15 +32,36 @@ class Entity:
 
     def __init__(self, name, hp, attack, sanity, shield, moves):
         self.name = name
-        self.hp = hp
+        self.stats = Stats(hp, attack, sanity, shield)
+        # self.hp = hp
         self.maxhp = hp
-        self.attack = attack
+        # self.attack = attack
         self.currattack = attack
-        self.sanity = sanity
+        # self.sanity = sanity
         self.currsanity = sanity
-        self.shield = shield
+        # self.shield = shield
         self.effects = []
         self.moves = moves
+
+    @property
+    def hp(self) -> int:
+        return self.stats.hp
+
+    @property
+    def maxhp(self) -> int:
+        return self.stats.maxhp
+
+    @property
+    def attack(self) -> int:
+        return self.stats.attack
+
+    @property
+    def sanity(self) -> int:
+        return self.stats.sanity
+
+    @property
+    def shield(self) -> int:
+        return self.stats.shield
 
     def take_hit(self, value):
         if value > self.shield:
