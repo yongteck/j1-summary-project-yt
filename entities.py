@@ -65,22 +65,22 @@ class Entity:
 
     def take_hit(self, value):
         if value > self.shield:
-            self.hp -= value - self.shield
-            self.shield = 0
+            self.stats.hp -= value - self.shield
+            self.stats.shield = 0
         else:
-            self.shield -= value
+            self.stats.shield -= value
 
     def heal(self, value):
         if self.hp + value > self.maxhp:
-            self.hp = self.maxhp
+            self.stats.hp = self.maxhp
         else:
-            self.hp += value
+            self.stats.hp += value
 
     def sacrifice(self, value):
         if self.hp - value < 1:
-            self.hp = 1
+            self.stats.hp = 1
         else:
-            self.hp -= value
+            self.stats.hp -= value
 
     def add_effects(self, lst):
         self.effects += [i for i in lst if i not in self.effects]
