@@ -48,7 +48,7 @@ def enter_combat(game, room):
         actor.displaystats()
         target.displaystats()
         choice = actor.getmoves()
-        print(ms.getdesc(choice))
+        print(action.get(choice).description)
         execute_action(choice, actor, target)
         actor, target = target, actor
     player.exit_combat()
