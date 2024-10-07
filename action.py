@@ -33,16 +33,6 @@ class OtherAction(Action):
     """OtherActions apply their effects to the target's stats."""
 
 
-def sacrifice(self, value):
-    if self.hp - value < 1:
-        self.stats.hp = 1
-    else:
-        self.stats.hp -= value
-
-
-
-
-
 class _TakeDamage(SelfAction):
     """Takes damage from the target.
     This is a private action that is invoked by other actions only.
