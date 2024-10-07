@@ -73,6 +73,16 @@ class Defend(SelfAction):
         stat.shield += stat.maxhp // 2
 
 
+class EnterCampfire(SelfAction):
+    """Heals the actor. The effect is applied to the actor's stats."""
+    name = "enter campfire"
+    description = "heals"
+
+    def apply_effect(self, stat: entities.Stats) -> None:
+        stat.hp = stat.maxhp
+        stat.sanity += 1
+
+
 class Heal(SelfAction):
     """Heal the actor."""
     name = "heal"
@@ -109,7 +119,16 @@ class IntegrationOneDotFive(SelfAction):
 
     def apply_effect(self, stat: entities.Stats) -> None:
         stat.attack += stat.attack // 2
-        Heal().apply_effect(stat)
+        Heal(stat).apply_effect(stat)
+
+
+class Read(SelfAction):
+    """Read the book. The effect is applied to the actor's stats."""
+    name = "read"
+    description = "you read the book"
+
+    def apply_effect(self, stat: entities.Stats) -> None:
+        stat.sanity -= 4
 
 
 class Sacrifice(SelfAction):
@@ -161,12 +180,16 @@ def get(name: str):
         return Adaptation
     elif name == "defend":
         return Defend
+    elif name == "enter campfire":
+        return EnterCampfire
     elif name == "heal":
         return Heal
     elif name == "hit":
         return Hit
     elif name == "integration x1.5":
         return IntegrationOneDotFive
+    elif name == "read":
+        return Read
     elif name == "sacrifice":
         return Sacrifice
     elif name == "slamdunk":

@@ -115,9 +115,9 @@ def enter_fgalter(game, room):
     """Enter event room"""
     choice = input("will you sacrifice blood? (y/n)")
     if choice == "y":
-        game.player.sacrifice(5)
-        game.player.attack += 1
-        game.player.sanity -= 4
+        Action = action.get("sacrifice")
+        entityAction = Action(game.player.stats)
+        entityAction.apply_effect(game.player.stats)
         print(dlg.getlog("fgsacrifice"))
         room.type = "explore"
     else:
@@ -134,7 +134,9 @@ def enter_library(game, room):
             break
         else:
             print(dlg.getlog(choice))
-            game.player.sanity -= 4
+            Action = action.get("read")
+            entityAction = Action(game.player.stats)
+            entityAction.apply_effect(game.player.stats)
             game.player.add_moves([choice])
             books.remove(choice)
     room.type = "explore"
@@ -142,8 +144,9 @@ def enter_library(game, room):
 def enter_campfire(game, room):
     """Enter campfire room."""
     print(dlg.getlog("campfire"))
-    game.player.hp = game.player.maxhp
-    game.player.sanity += 1
+    Action = action.get("enter campfire")
+    entityAction = Action(game.player.stats)
+        entityAction.apply_effect(game.player.stats)
     room.type = "explore"
 
 def inventory_or_leave(game, room):
