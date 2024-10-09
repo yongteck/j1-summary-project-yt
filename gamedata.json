@@ -1,0 +1,127 @@
+{
+    "player": {
+        "name": "Player",
+        "hp": 10,
+        "attack": 4,
+        "sanity": 10,
+        "shield": 0,
+        "moves": ["hit", "defend"]
+    },
+    "enemy": {
+        "goblin": {
+            "name": "goblin",
+            "hp": 10,
+            "attack": 2,
+            "sanity": 5,
+            "shield": 0,
+            "moves": ["trip"]
+        },
+        "ny math homework": {
+            "name": "ny math homework",
+            "hp": 25,
+            "attack": 3,
+            "sanity": 5,
+            "shield": 0,
+            "moves": ["integration x1.5"]
+        },
+        "lebron james": {
+            "name": "lebron james",
+            "hp": 10,
+            "attack": 6,
+            "sanity": 20,
+            "shield": 0,
+            "moves": ["slamdunk"]
+        }
+    },
+    "itemeffects": {
+        "sharp": {"attack": 2},
+        "sane": {"sanity": 5},
+        "guarded": {"shield": 5}
+    },
+    "rooms": [
+        {
+            "id": 1,
+            "type": "explore",
+            "description": "tutorial stage",
+            "monsters": [],
+            "items": [],
+            "exits": [2, 3]
+        },
+        {
+            "id": 2,
+            "type": "fgaltar",
+            "description": "false god's altar",
+            "monsters": [],
+            "items": [],
+            "exits": [4]
+        },
+        {
+            "id": 3,
+            "type": "combat",
+            "description": "bedroom",
+            "monsters": ["goblin"],
+            "items": ["wooden sword"],
+            "exits": [4]
+        },
+        {
+            "id": 4,
+            "type": "treasure",
+            "description": "king's bedroom",
+            "monsters": [],
+            "items": ["wooden shield", "pendant"],
+            "exits": [5, 6]
+        },
+        {
+            "id": 5,
+            "type": "library1",
+            "description": "a dilapidated library",
+            "monsters": [],
+            "items": [],
+            "exits": [6, 7]
+        },
+        {
+            "id": 6,
+            "type": "combat",
+            "description": "hallway",
+            "monsters": ["lebron james"],
+            "items": [],
+            "exits": [7]
+        },
+        {
+            "id": 7,
+            "type": "campfire",
+            "description": "a moment of respite",
+            "monsters": [],
+            "items": [],
+            "exits": [6, 8]
+        },
+        {
+            "id": 8,
+            "type": "combat",
+            "description": "dungeon",
+            "monsters": ["ny math homework"],
+            "items": [],
+            "exits": [1]
+        }
+    ],
+    "items": {
+        "wooden sword": {
+            "name": "wooden sword",
+            "description": "a trusty wooden blade",
+            "effects": ["sharp"],
+            "states": ""
+        },
+        "wooden shield": {
+            "name": "wooden shield",
+            "description": "a basic defensive tool",
+            "effects": ["guarded"]
+            "states": ""
+        },
+        "pendant": {
+            "name": "pendant",
+            "description": "a locket with a blurred photo inside",
+            "effects": ["sane"],
+            "states": ""
+        }
+    }
+}
