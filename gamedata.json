@@ -33,7 +33,7 @@
             "moves": ["slamdunk"]
         }
     },
-    "effects": {
+    "itemeffects": {
         "sharp": {"attack": 2},
         "sane": {"sanity": 5},
         "guarded": {"shield": 5}
