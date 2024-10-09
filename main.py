@@ -18,18 +18,14 @@ def show_room_info(room_id, type, description) -> None:
     print(description)
     print()
 
-def apply_inventory_effects(game, stats: entities.Stats):
+def apply_inventory_effects(game, entity: entities.Entity):
     """Update player stats based on effect of inventory items"""
     # TODO: Refactor to make effect updates dynamic
     effects = game.inventory.get_item_effects()
     #change stats based off effects
-    for effect in effects:
-        if effect == "sharp":
-            stats.attack += 2
-        if effect == "sane":
-            stats.sanity += 5
-        if effect == "guarded":
-            stats.shield += 5
+    for name in effects:
+        effect = inventory.create_item_effect(name)
+        effect.apply_effect(entity)
 
 def enter_combat(game, room):
     """Enter a combat room"""
@@ -40,7 +36,7 @@ def enter_combat(game, room):
     # Stats during combat are temporary and should not be applied to the entity directly
     # Changes to permanent stats are applied back to the entity after combat
     player.enter_combat()
-    apply_inventory_effects(game, player.stats)
+    apply_inventory_effects(game, player)
     monster.enter_combat()
     actor, target = player, monster
     while not (player.isdead() or monster.isdead()):
