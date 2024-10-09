@@ -20,9 +20,7 @@ def show_room_info(room_id, type, description) -> None:
 
 def apply_inventory_effects(game, entity: entities.Entity):
     """Update player stats based on effect of inventory items"""
-    # TODO: Refactor to make effect updates dynamic
     effects = game.inventory.get_item_effects()
-    #change stats based off effects
     for name in effects:
         effect = inventory.create_item_effect(name)
         effect.apply_effect(entity)
