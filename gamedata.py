@@ -17,7 +17,7 @@ def load(filename: str) -> dict:
 def reload():
     """Reload game data from file"""
     data = load(DATAFILE)
-    global player, enemy, effects, rooms
+    global player, enemy, effects, rooms, items
     player = data["player"]
     enemy = data["enemy"]
     effects = data["effects"]
